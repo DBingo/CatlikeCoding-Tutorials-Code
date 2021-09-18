@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6426713978795747158
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6851503257100564383}
+  - component: {fileID: -5200862362441060113}
+  m_Layer: 0
+  m_Name: Maze
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6851503257100564383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6426713978795747158}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5200862362441060113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6426713978795747158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3150923bc66bd24886da0548dd8cd17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size:
+    x: 20
+    z: 20
+  generationStepDelay: 0.01
+  cellPrefab: {fileID: 524855092947519143, guid: 240e9aa399474a44e97f13b9fbdc567f, type: 3}
+  passagePrefab: {fileID: 8851413689180533908, guid: 63bdf79253d5625439aa3360eb67fa37, type: 3}
+  doorPrefab: {fileID: 5075786567375995732, guid: 28a37a55cb6f3d54f96884a3f30a550c, type: 3}
+  doorProbability: 0.1
+  wallPrefabs:
+  - {fileID: 7328972216603778583, guid: f5ab629e69d6dba468eca7fb332a7291, type: 3}
+  - {fileID: 4883546249230514835, guid: a49f43cd35aa3384db61dcb3d446ffa6, type: 3}
+  - {fileID: 3995262573635019080, guid: 146c54012e104e6478244b6421de2386, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  - {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  roomSettings:
+  - floorMaterial: {fileID: 2100000, guid: d48253ce106df3e49820efc7ea3d694a, type: 2}
+    wallMaterial: {fileID: 2100000, guid: 5773e5ae3f4343d4d9b05c9133294ddc, type: 2}
+  - floorMaterial: {fileID: 2100000, guid: 80ec83d0494512440936c9a3e147b2ce, type: 2}
+    wallMaterial: {fileID: 2100000, guid: f7af0b22e4d1c4640b672d0de1ff2a05, type: 2}
+  - floorMaterial: {fileID: 2100000, guid: 730ccd833fb5c9648ab78fc3fc1a3771, type: 2}
+    wallMaterial: {fileID: 2100000, guid: fb213f3643435234b8d9f0f905e8ebca, type: 2}
+  - floorMaterial: {fileID: 2100000, guid: a7773dcacc304bd45bdfdfb1df9cb1ff, type: 2}
+    wallMaterial: {fileID: 2100000, guid: c617aa3eefdc73f49a2891b6f679fbac, type: 2}

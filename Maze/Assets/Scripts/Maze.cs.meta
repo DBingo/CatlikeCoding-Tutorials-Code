@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c3150923bc66bd24886da0548dd8cd17
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - cellPrefab: {fileID: 524855092947519143, guid: 240e9aa399474a44e97f13b9fbdc567f, type: 3}
+  - passagePrefab: {fileID: 8851413689180533908, guid: 63bdf79253d5625439aa3360eb67fa37, type: 3}
+  - wallPrefab: {fileID: 2966050445873011251, guid: 14a6564c6a5fb8c4ba1aaec3dcf4178a, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
