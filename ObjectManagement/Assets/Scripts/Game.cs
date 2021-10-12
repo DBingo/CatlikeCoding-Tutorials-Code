@@ -21,6 +21,10 @@ public class Game : PersistableObject
 
     private List<Shape> shapes;
 
+    public SpawnZone spawnZoneOfLevel { get; set; }
+
+    public static Game Instance { get; private set; }
+
     public float CreationSpeed { get; set; }
     public float DestructionSpeed { get; set; }
 
@@ -29,6 +33,8 @@ public class Game : PersistableObject
 
     private void Start()
     {
+        Instance = this;
+
         shapes = new List<Shape>();
 
         if (Application.isEditor)
@@ -101,11 +107,16 @@ public class Game : PersistableObject
         }
     }
 
+    private void OnEnable()
+    {
+        Instance = this;
+    }
+
     private void CreateShape()
     {
         Shape instance = shapeFactory.GetRandom();
         Transform t = instance.transform;
-        t.localPosition = Random.insideUnitSphere * 5f;
+        t.localPosition = spawnZoneOfLevel.SpawnPoint;
         t.localRotation = Random.rotation;
         t.localScale = Vector3.one * Random.Range(0.1f, 1f);
         instance.SetColor(Random.ColorHSV(
