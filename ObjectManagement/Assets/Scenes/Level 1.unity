@@ -211,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnZone: {fileID: 932226587}
+  persistableObjects: []
 --- !u!1 &1322981263
 GameObject:
   m_ObjectHideFlags: 0
