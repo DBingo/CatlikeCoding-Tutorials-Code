@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Game : PersistableObject
 {
-    const int saveVersion = 4;
+    const int saveVersion = 5;
 
     Random.State mainRandomState;
 
@@ -14,7 +14,7 @@ public class Game : PersistableObject
     private PersistentStorage storage;
 
     [SerializeField]
-    private ShapeFactory shapeFactory;
+    private ShapeFactory[] shapeFactories;
 
     [SerializeField]
     private int levelCount;
@@ -122,11 +122,20 @@ public class Game : PersistableObject
         }
     }
 
+    private void OnEnable()
+    {
+        if (shapeFactories[0].FactoryId != 0)
+        {
+            for (int i = 0; i < shapeFactories.Length; i++)
+            {
+                shapeFactories[i].FactoryId = i;
+            }
+        }
+    }
+
     private void CreateShape()
     {
-        Shape instance = shapeFactory.GetRandom();
-        GameLevel.Current.ConfigureSpawn(instance);
-        shapes.Add(instance);
+        shapes.Add(GameLevel.Current.SpawnShape());
     }
 
     private void DestroyShape()
@@ -135,7 +144,7 @@ public class Game : PersistableObject
         {
             int index = Random.Range(0, shapes.Count);
 
-            shapeFactory.Reclaim(shapes[index]);
+            shapes[index].Recycle();
 
             int lastIndex = shapes.Count - 1;
             shapes[index] = shapes[lastIndex];
@@ -155,7 +164,7 @@ public class Game : PersistableObject
 
         for (int i = 0; i < shapes.Count; i++)
         {
-            shapeFactory.Reclaim(shapes[i]);
+            shapes[i].Recycle();
         }
         shapes.Clear();
     }
@@ -172,6 +181,7 @@ public class Game : PersistableObject
         GameLevel.Current.Save(writer);
         for (int i = 0; i < shapes.Count; i++)
         {
+            writer.Write(shapes[i].OriginFactory.FactoryId);
             writer.Write(shapes[i].ShapeId);
             writer.Write(shapes[i].MaterialId);
             shapes[i].Save(writer);
@@ -216,9 +226,10 @@ public class Game : PersistableObject
        
         for (int i = 0; i < count; i++)
         {
+            int factoryId = version >= 5 ? reader.ReadInt() : 0;
             int shapeId = version > 0 ? reader.ReadInt() : 0;
             int materialId = version > 0 ? reader.ReadInt() : 0;
-            Shape instance = shapeFactory.Get(shapeId, materialId);
+            Shape instance = shapeFactories[factoryId].Get(shapeId, materialId);
             instance.Load(reader);
             shapes.Add(instance);
         }
