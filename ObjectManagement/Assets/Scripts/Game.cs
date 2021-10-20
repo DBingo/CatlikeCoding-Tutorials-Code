@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Game : PersistableObject
 {
-    const int saveVersion = 5;
+    const int saveVersion = 6;
 
     Random.State mainRandomState;
 
