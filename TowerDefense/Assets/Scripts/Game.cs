@@ -4,12 +4,16 @@ public class Game : MonoBehaviour
 {
     [SerializeField]
     Vector2Int boardSize = new Vector2Int(11, 11);
-
     [SerializeField]
     GameBoard board = default;
-
     [SerializeField]
     GameTileContentFactory tileContentFactory = default;
+    [SerializeField]
+    EnemyFactory enemyFactory = default;
+    [SerializeField, Range(0.1f, 10f)]
+    float spawnSpeed = 1f;
+
+    EnemyCollection enemies = new EnemyCollection();
 
     private void Awake()
     {
@@ -29,8 +33,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    Ray TouchRay => Camera.main.ScreenPointToRay(Input.mousePosition);
-
+    float spawnProgress;
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -50,23 +53,48 @@ public class Game : MonoBehaviour
         {
             board.ShowGrid = !board.ShowGrid;
         }
-    }
 
-    void HandleAlternativeTouch()
-    {
-        GameTile tile = board.GetTile(TouchRay);
-        if(tile != null)
+        spawnProgress += spawnSpeed * Time.deltaTime;
+        while(spawnProgress >= 1f)
         {
-            board.ToggleDestination(tile);
+            spawnProgress -= 1f;
+            SpawnEnemy();
         }
+
+        enemies.GameUpdate();
     }
 
+    void SpawnEnemy()
+    {
+        GameTile spawnPoint = board.GetSpawnPoint(Random.Range(0, board.SpawnPointCount));
+        Enemy enemy = enemyFactory.Get();
+        enemy.SpawnOn(spawnPoint);
+
+        enemies.Add(enemy);
+    }
+
+    Ray TouchRay => Camera.main.ScreenPointToRay(Input.mousePosition);
     void HandleTouch()
     {
         GameTile tile = board.GetTile(TouchRay);
         if(tile != null)
         {
             board.ToggleWall(tile);
+        }
+    }
+    void HandleAlternativeTouch()
+    {
+        GameTile tile = board.GetTile(TouchRay);
+        if (tile != null)
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                board.ToggleDestination(tile);
+            }
+            else
+            {
+                board.ToggleSpawnPoint(tile);
+            }
         }
     }
 }
