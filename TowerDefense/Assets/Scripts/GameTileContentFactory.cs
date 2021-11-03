@@ -11,6 +11,8 @@ public class GameTileContentFactory : GameObjectFactory
     GameTileContent wallPrefab = default;
     [SerializeField]
     GameTileContent spawnPointPrefab = default;
+    [SerializeField]
+    Tower towerPrefab = default;
 
     public void Reclaim (GameTileContent content)
     {
@@ -26,6 +28,7 @@ public class GameTileContentFactory : GameObjectFactory
             case GameTileContentType.Empty: return Get(emptyPrefab);
             case GameTileContentType.Wall: return Get(wallPrefab);
             case GameTileContentType.SpawnPoint: return Get(spawnPointPrefab);
+            case GameTileContentType.Tower: return Get(towerPrefab);
         }
         Debug.Assert(false, "Unsupported type: " + type);
         return null;

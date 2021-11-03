@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     float directionAngleFrom, directionAngleTo;
 
     float pathOffset, speed;
+    public float Scale { get; private set; }
+    float Health { get; set; }
 
     public EnemyFactory OriginFactory
     {
@@ -36,8 +38,10 @@ public class Enemy : MonoBehaviour
     public void Initialize(float scale, float speed, float pathOffset)
     {
         model.localScale = new Vector3(scale, scale, scale);
+        Scale = scale;
         this.pathOffset = pathOffset;
         this.speed = speed;
+        Health = 100f * scale;
     }
     void PrepareIntro()
     {
@@ -116,6 +120,12 @@ public class Enemy : MonoBehaviour
 
     public bool GameUpdate()
     {
+        if (Health <= 0f)
+        {
+            OriginFactory.Reclaim(this);
+            return false;
+        }
+
         progress += Time.deltaTime * progressFactor;
 
         while(progress >= 1f)
@@ -143,5 +153,11 @@ public class Enemy : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void ApplyDamage(float damage)
+    {
+        Debug.Assert(damage >= 0f, "Negative damage applied.");
+        Health -= damage;
     }
 }

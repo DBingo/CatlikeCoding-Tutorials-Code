@@ -16,6 +16,7 @@ public class GameBoard : MonoBehaviour
     GameTile[] tiles;
     List<GameTile> spawnPoints = new List<GameTile>();
     Queue<GameTile> searchFrontier = new Queue<GameTile>();
+    List<GameTileContent> updatingContent = new List<GameTileContent>();
 
     GameTileContentFactory contentFactory;
 
@@ -65,7 +66,7 @@ public class GameBoard : MonoBehaviour
 
     public GameTile GetTile (Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, 1))
         {
             int x = (int)(hit.point.x + size.x * 0.5f);
             int y = (int)(hit.point.z + size.y * 0.5f);
@@ -181,6 +182,34 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
+    public void ToggleTower(GameTile tile)
+    {
+        if (tile.Content.Type == GameTileContentType.Tower)
+        {
+            updatingContent.Remove(tile.Content);
+            tile.Content = contentFactory.Get(GameTileContentType.Empty);
+            FindPaths();
+        }
+        else if (tile.Content.Type == GameTileContentType.Empty)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.Tower);
+
+            if (FindPaths())
+            {
+                updatingContent.Add(tile.Content);
+            }
+            else
+            {
+                tile.Content = contentFactory.Get(GameTileContentType.Empty);
+                FindPaths();
+            }
+        }
+        else if (tile.Content.Type == GameTileContentType.Wall)
+        {
+            tile.Content = contentFactory.Get(GameTileContentType.Tower);
+            updatingContent.Add(tile.Content);
+        }
+    }
     public void ToggleSpawnPoint(GameTile tile)
     {
         if (tile.Content.Type == GameTileContentType.SpawnPoint)
@@ -237,6 +266,13 @@ public class GameBoard : MonoBehaviour
             {
                 m.mainTexture = null;
             }
+        }
+    }
+    public void GameUpdate()
+    {
+        for (int i = 0; i < updatingContent.Count; i++)
+        {
+            updatingContent[i].GameUpdate();
         }
     }
 }
