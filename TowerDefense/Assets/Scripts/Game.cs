@@ -10,15 +10,39 @@ public class Game : MonoBehaviour
     GameTileContentFactory tileContentFactory = default;
     [SerializeField]
     EnemyFactory enemyFactory = default;
+    [SerializeField]
+    WarFactory warFactory = default;
     [SerializeField, Range(0.1f, 10f)]
     float spawnSpeed = 1f;
 
-    EnemyCollection enemies = new EnemyCollection();
+    TowerType selectedTowerType;
+
+    GameBehaviorCollection enemies = new GameBehaviorCollection();
+    GameBehaviorCollection nonEnemies = new GameBehaviorCollection();
+
+    static Game instance;
+
+    public static Shell SpawnShell()
+    {
+        Shell shell = instance.warFactory.Shell;
+        instance.nonEnemies.Add(shell);
+        return shell;
+    }
+    public static Explosion SpawnExplosion()
+    {
+        Explosion explosion = instance.warFactory.Explosion;
+        instance.nonEnemies.Add(explosion);
+        return explosion;
+    }
 
     private void Awake()
     {
         board.Initialize(boardSize, tileContentFactory);
         board.ShowGrid = true;
+    }
+    private void OnEnable()
+    {
+        instance = this;
     }
 
     private void OnValidate()
@@ -54,6 +78,15 @@ public class Game : MonoBehaviour
             board.ShowGrid = !board.ShowGrid;
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            selectedTowerType = TowerType.Laser;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            selectedTowerType = TowerType.Mortar;
+        }
+
         spawnProgress += spawnSpeed * Time.deltaTime;
         while(spawnProgress >= 1f)
         {
@@ -64,6 +97,7 @@ public class Game : MonoBehaviour
         enemies.GameUpdate();
         Physics.SyncTransforms();
         board.GameUpdate();
+        nonEnemies.GameUpdate();
     }
 
     void SpawnEnemy()
@@ -83,7 +117,7 @@ public class Game : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                board.ToggleTower(tile);
+                board.ToggleTower(tile, selectedTowerType);
             }
             else
             {

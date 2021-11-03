@@ -1,37 +1,9 @@
 using UnityEngine;
 
-public class Tower : GameTileContent
+public abstract class Tower : GameTileContent
 {
     [SerializeField, Range(1.5f, 10.5f)]
-    float targetingRange = 1.5f;
-    [SerializeField]
-    Transform turret = default, laserBeam = default;
-    [SerializeField, Range(1f, 100f)]
-    float damagePerSecond = 10f;
-
-    const int enemyLayerMask = 1 << 9;
-    TargetPoint target;
-
-    static Collider[] targetsBuffer = new Collider[100];
-
-    Vector3 laserBeamScale;
-
-    private void Awake()
-    {
-        laserBeamScale = laserBeam.localScale;
-    }
-
-    public override void GameUpdate()
-    {
-        if (TrackTarget() || AcquireTarget())
-        {
-            Shoot();
-        }
-        else
-        {
-            laserBeam.localScale = Vector3.zero;
-        }
-    }
+    protected float targetingRange = 1.5f;
 
     private void OnDrawGizmosSelected()
     {
@@ -39,31 +11,20 @@ public class Tower : GameTileContent
         Vector3 position = transform.localPosition;
         position.y += 0.01f;
         Gizmos.DrawWireSphere(position, targetingRange);
-
-        if (target != null)
-        {
-            Gizmos.DrawLine(position, target.Position);
-        }
     }
-
-    bool AcquireTarget()
+    public abstract TowerType TowerType { get; }
+    protected bool AcquireTarget(out TargetPoint target)
     {
-        Vector3 a = transform.localPosition;
-        Vector3 b = a;
-        b.y += 3f;
-
-        int hits = Physics.OverlapCapsuleNonAlloc(a, b, targetingRange, targetsBuffer, enemyLayerMask);
-        if (hits > 0)
+        if(TargetPoint.FillBuffer(transform.localPosition, targetingRange))
         {
-            target = targetsBuffer[Random.Range(0, hits)].GetComponent<TargetPoint>();
-            Debug.Assert(target != null, "Targeted non-enemy!", targetsBuffer[0]);
+            target = TargetPoint.RandomBuffered;
             return true;
         }
+
         target = null;
         return false;
     }
-
-    bool TrackTarget()
+    protected bool TrackTarget(ref TargetPoint target)
     {
         if (target == null)
         {
@@ -82,17 +43,5 @@ public class Tower : GameTileContent
         }
 
         return true;
-    }
-
-    void Shoot()
-    {
-        Vector3 point = target.Position;
-        turret.LookAt(point);
-        laserBeam.localRotation = turret.localRotation;
-        float d = Vector3.Distance(turret.position, point);
-        laserBeamScale.z = d;
-        laserBeam.localScale = laserBeamScale;
-        laserBeam.localPosition = turret.localPosition + 0.5f * d * laserBeam.forward;
-        target.Enemy.ApplyDamage(damagePerSecond * Time.deltaTime);
     }
 }
