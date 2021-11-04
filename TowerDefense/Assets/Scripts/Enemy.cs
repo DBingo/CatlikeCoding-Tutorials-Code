@@ -35,13 +35,13 @@ public class Enemy : GameBehavior
         progress = 0f;
         PrepareIntro();
     }
-    public void Initialize(float scale, float speed, float pathOffset)
+    public void Initialize(float scale, float speed, float pathOffset, float health)
     {
         model.localScale = new Vector3(scale, scale, scale);
         Scale = scale;
         this.pathOffset = pathOffset;
         this.speed = speed;
-        Health = 100f * scale;
+        Health = health;
     }
     void PrepareIntro()
     {
@@ -122,7 +122,7 @@ public class Enemy : GameBehavior
     {
         if (Health <= 0f)
         {
-            OriginFactory.Reclaim(this);
+            Recycle();
             return false;
         }
 
@@ -132,7 +132,8 @@ public class Enemy : GameBehavior
         {
             if (tileTo == null)
             {
-                OriginFactory.Reclaim(this);
+                Game.EnemyReachedDestination();
+                Recycle();
                 return false;
             }
 
@@ -159,5 +160,10 @@ public class Enemy : GameBehavior
     {
         Debug.Assert(damage >= 0f, "Negative damage applied.");
         Health -= damage;
+    }
+
+    public override void Recycle()
+    {
+        OriginFactory.Reclaim(this);
     }
 }
